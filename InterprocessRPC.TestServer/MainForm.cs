@@ -7,11 +7,16 @@ namespace InterprocessRPC.TestServer
 {
     public partial class MainForm : Form
     {
-        private Server<IProxy> server;
+        private Server<IProxy> server = new Server<IProxy>();
 
         public MainForm()
         {
             InitializeComponent();
+
+            server.ListeningStart += () => AppendMessage("Server started");
+            server.ListeningStop += () => AppendMessage("Server stopped");
+            server.ClientConnected += _ => AppendMessage($"Client connected. Clients count: {server.Connections.Count}");
+            server.ClientDisconnected += _ => AppendMessage($"Client disconnected. Clients count: {server.Connections.Count}");
         }
 
         private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -19,20 +24,28 @@ namespace InterprocessRPC.TestServer
             await Stop();
         }
 
+        private Proxy CreateProxy()
+        {
+            var proxy = new Proxy();
+            proxy.GetServerInfoFunc += () => new ServerInfo
+            {
+                ConnectionsCount = server.Connections.Count,
+                ServerTime = DateTime.Now
+            };
+            return proxy;
+        }
+
         private async void btnStart_Click(object sender, EventArgs e)
         {
             try
             {
-                server?.Stop();
-                server = new Server<IProxy>();
-
                 var proxy = new Proxy();
                 proxy.GetServerInfoFunc += () => new ServerInfo
                 {
                     ConnectionsCount = server.Connections.Count,
                     ServerTime = DateTime.Now
                 };
-                await server.Start(Proxy.ProxyPipeName, () => proxy);
+                await server.Start(Proxy.ProxyPipeName, CreateProxy);
             }
             catch (Exception exc)
             {
@@ -58,6 +71,15 @@ namespace InterprocessRPC.TestServer
             {
                 MessageBox.Show(exc.Message);
             }
+        }
+
+        private void AppendMessage(string message)
+        {
+            this.SafeInvoke(() =>
+            {
+                tbMessages.Text = $"[{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss.fff")}] - {message}"
+                    + Environment.NewLine + tbMessages.Text;
+            });
         }
     }
 }

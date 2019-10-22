@@ -30,6 +30,7 @@
         {
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
+            this.tbMessages = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnStart
@@ -38,7 +39,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStart.Location = new System.Drawing.Point(12, 12);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(285, 23);
+            this.btnStart.Size = new System.Drawing.Size(449, 23);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "Start";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -50,23 +51,33 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStop.Location = new System.Drawing.Point(12, 41);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(285, 23);
+            this.btnStop.Size = new System.Drawing.Size(449, 23);
             this.btnStop.TabIndex = 1;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
+            // tbMessages
+            // 
+            this.tbMessages.Location = new System.Drawing.Point(12, 70);
+            this.tbMessages.Multiline = true;
+            this.tbMessages.Name = "tbMessages";
+            this.tbMessages.Size = new System.Drawing.Size(449, 266);
+            this.tbMessages.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(309, 81);
+            this.ClientSize = new System.Drawing.Size(473, 348);
+            this.Controls.Add(this.tbMessages);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
             this.Name = "MainForm";
             this.Text = "InterprocessRPC - Server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -74,6 +85,7 @@
 
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.TextBox tbMessages;
     }
 }
 

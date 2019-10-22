@@ -18,6 +18,7 @@ namespace InterprocessRPC
         where TProxy : class
     {
         private CancellationTokenSource cancellationTokenSource;
+        private AutoResetEvent connectionTaskResetEvent = new AutoResetEvent(true);
 
         public event OnListeningStart ListeningStart;
 
@@ -48,17 +49,26 @@ namespace InterprocessRPC
         {
             Task.Run(async () =>
             {
-                ListeningStart?.Invoke();
-                while (!token.IsCancellationRequested)
+                connectionTaskResetEvent.WaitOne();
+                try
                 {
-                    var stream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
-                    await stream.WaitForConnectionAsync(token);
-                    if (token.IsCancellationRequested)
+                    ListeningStart?.Invoke();
+                    while (!token.IsCancellationRequested)
                     {
-                        StartListeningTask(stream, proxy, token);
+                        var stream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+                        try
+                        {
+                            await stream.WaitForConnectionAsync(token);
+                            StartListeningTask(stream, proxy, token);
+                        }
+                        catch (OperationCanceledException) { }
                     }
                 }
-                ListeningStop?.Invoke();
+                finally
+                {
+                    ListeningStop?.Invoke();
+                    connectionTaskResetEvent.Set();
+                }
             }, token);
         }
 
@@ -72,15 +82,22 @@ namespace InterprocessRPC
                     Stream = stream,
                     Guid = Guid.NewGuid()
                 };
-                Connections.Add(connection);
-                ClientConnected?.Invoke(connection);
-                while (stream.IsConnected && !token.IsCancellationRequested)
+
+                try
                 {
-                    await Task.Delay(1, token);
+                    Connections.Add(connection);
+                    ClientConnected?.Invoke(connection);
+                    while (stream.IsConnected && !token.IsCancellationRequested)
+                    {
+                        await Task.Delay(1, token);
+                    }
                 }
-                Connections.Remove(connection);
-                ClientDisconnected?.Invoke(connection);
-                connection.Dispose();
+                finally
+                {
+                    Connections.Remove(connection);
+                    ClientDisconnected?.Invoke(connection);
+                    connection.Dispose();
+                }
             }, token);
         }
 
@@ -94,7 +111,6 @@ namespace InterprocessRPC
                     await Task.Delay(10);
                 }
             });
-            ListeningStop?.Invoke();
         }
     }
 }
