@@ -1,5 +1,6 @@
 ﻿using InterprocessRPC.Common;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace InterprocessRPC.TestServer
@@ -13,16 +14,16 @@ namespace InterprocessRPC.TestServer
             InitializeComponent();
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Stop();
+            await Stop();
         }
 
         private async void btnStart_Click(object sender, EventArgs e)
         {
             try
             {
-                server?.Dispose();
+                server?.Stop();
                 server = new Server<IProxy>();
 
                 var proxy = new Proxy();
@@ -39,16 +40,19 @@ namespace InterprocessRPC.TestServer
             }
         }
 
-        private void btnStop_Click(object sender, EventArgs e)
+        private async void btnStop_Click(object sender, EventArgs e)
         {
-            Stop();
+            await Stop();
         }
 
-        private void Stop()
+        private async Task Stop()
         {
             try
             {
-                server?.Dispose();
+                if (server != null)
+                {
+                    await server.Stop();
+                }
             }
             catch (Exception exc)
             {

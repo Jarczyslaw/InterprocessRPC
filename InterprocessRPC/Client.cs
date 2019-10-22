@@ -26,7 +26,7 @@ namespace InterprocessRPC
 
         public async Task Start(string pipeName)
         {
-            Dispose();
+            Stop();
             await StartNew(pipeName);
         }
 
@@ -38,9 +38,14 @@ namespace InterprocessRPC
             Proxy = JsonRpc.Attach<TProxy>(Stream);
         }
 
-        public void Dispose()
+        public void Stop()
         {
             ((IDisposable)Proxy)?.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
     }
 }
