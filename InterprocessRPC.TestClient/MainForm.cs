@@ -17,9 +17,12 @@ namespace InterprocessRPC.TestClient
         {
             try
             {
-                client?.Dispose();
-                client = new Client<IProxy>();
-                await client.Start(Proxy.ProxyPipeName);
+                using (var execTime = new ExecutionTime())
+                {
+                    client?.Dispose();
+                    client = new Client<IProxy>();
+                    await client.Start(Proxy.ProxyPipeName);
+                }
             }
             catch (Exception exc)
             {
@@ -36,7 +39,11 @@ namespace InterprocessRPC.TestClient
         {
             try
             {
-                var result = await client.Proxy.CheckConnection();
+                var result = false;
+                using (var execTime = new ExecutionTime())
+                {
+                    result = await client.Proxy.CheckConnection();
+                }
                 MessageBox.Show("Connection state: " + (result ? "connected" : "disconnected"));
             }
             catch (Exception exc)
@@ -55,7 +62,11 @@ namespace InterprocessRPC.TestClient
 
             try
             {
-                var message = await client.Proxy.GetHelloMessage(tbName.Text);
+                var message = string.Empty;
+                using (var execTime = new ExecutionTime())
+                {
+                    message = await client.Proxy.GetHelloMessage(tbName.Text);
+                }
                 MessageBox.Show(message);
             }
             catch (Exception exc)
@@ -68,7 +79,11 @@ namespace InterprocessRPC.TestClient
         {
             try
             {
-                var serverInfo = await client.Proxy.GetServerInfo();
+                ServerInfo serverInfo = null;
+                using (var execTime = new ExecutionTime())
+                {
+                    serverInfo = await client.Proxy.GetServerInfo();
+                }
                 MessageBox.Show(serverInfo.ToString());
             }
             catch (Exception exc)

@@ -31,7 +31,7 @@ namespace InterprocessRPC.TestServer
                     ConnectionsCount = server.Connections.Count,
                     ServerTime = DateTime.Now
                 };
-                await server.Start(Proxy.ProxyPipeName, () => proxy);
+                server.Start(Proxy.ProxyPipeName, () => proxy);
             }
             catch (Exception exc)
             {

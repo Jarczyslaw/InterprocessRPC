@@ -16,8 +16,7 @@ namespace InterprocessRPC
         public async Task Start(string pipeName, Func<TProxy> factoryFunc)
         {
             Dispose();
-            await StartNew(pipeName, factoryFunc)
-                .ConfigureAwait(false);
+            await StartNew(pipeName, factoryFunc);
         }
 
         private async Task StartNew(string pipeName, Func<TProxy> factoryFunc)
@@ -26,8 +25,7 @@ namespace InterprocessRPC
             while (true)
             {
                 var stream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
-                await stream.WaitForConnectionAsync()
-                    .ConfigureAwait(false);
+                await stream.WaitForConnectionAsync();
                 var rpc = JsonRpc.Attach(stream, factoryFunc());
                 var connection = new ServerConnections
                 {
@@ -37,8 +35,7 @@ namespace InterprocessRPC
                 Connections.Add(connection);
                 while (connection.IsAlive)
                 {
-                    await Task.Delay(1)
-                        .ConfigureAwait(false);
+                    await Task.Delay(1);
                 }
                 Connections.Remove(connection);
             }

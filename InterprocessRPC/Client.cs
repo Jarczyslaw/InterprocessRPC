@@ -9,7 +9,6 @@ namespace InterprocessRPC
         where TProxy : class
     {
         public TProxy Proxy { get; private set; }
-        public JsonRpc Rpc { get; private set; }
         public NamedPipeClientStream Stream { get; private set; }
         public string PipeName { get; private set; }
 
@@ -21,25 +20,22 @@ namespace InterprocessRPC
                 {
                     return false;
                 }
-                return Stream.IsConnected;
+                return Stream.IsConnected && Proxy != null;
             }
         }
 
         public async Task Start(string pipeName)
         {
             Dispose();
-            await StartNew(pipeName)
-                .ConfigureAwait(false);
+            await StartNew(pipeName);
         }
 
         private async Task StartNew(string pipeName)
         {
             PipeName = pipeName;
             Stream = new NamedPipeClientStream(".", PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
-            await Stream.ConnectAsync()
-                .ConfigureAwait(false);
-            Rpc = new JsonRpc(Stream);
-            Proxy = Rpc.Attach<TProxy>();
+            await Stream.ConnectAsync();
+            Proxy = JsonRpc.Attach<TProxy>(Stream);
         }
 
         public void Dispose()
