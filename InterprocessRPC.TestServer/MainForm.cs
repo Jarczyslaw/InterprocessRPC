@@ -81,5 +81,10 @@ namespace InterprocessRPC.TestServer
                     + Environment.NewLine + tbMessages.Text;
             });
         }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            tbMessages.Text = string.Empty;
+        }
     }
 }

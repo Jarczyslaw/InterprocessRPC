@@ -42,10 +42,10 @@ namespace InterprocessRPC
         {
             PipeName = pipeName;
             cancellationTokenSource = new CancellationTokenSource();
-            StartConnectionTask(factoryFunc(), cancellationTokenSource.Token);
+            StartListeningTask(factoryFunc(), cancellationTokenSource.Token);
         }
 
-        private void StartConnectionTask(TProxy proxy, CancellationToken token)
+        private void StartListeningTask(TProxy proxy, CancellationToken token)
         {
             Task.Run(async () =>
             {
@@ -53,16 +53,7 @@ namespace InterprocessRPC
                 try
                 {
                     ListeningStart?.Invoke();
-                    while (!token.IsCancellationRequested)
-                    {
-                        var stream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
-                        try
-                        {
-                            await stream.WaitForConnectionAsync(token);
-                            StartListeningTask(stream, proxy, token);
-                        }
-                        catch (OperationCanceledException) { }
-                    }
+                    await StartListening(proxy, token);
                 }
                 finally
                 {
@@ -72,7 +63,24 @@ namespace InterprocessRPC
             }, token);
         }
 
-        private void StartListeningTask(NamedPipeServerStream stream, TProxy proxy, CancellationToken token)
+        private async Task StartListening(TProxy proxy, CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                var stream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+                try
+                {
+                    await stream.WaitForConnectionAsync(token);
+                    StartConnectionTask(stream, proxy, token);
+                }
+                catch (OperationCanceledException)
+                {
+                    stream.Dispose();
+                }
+            }
+        }
+
+        private void StartConnectionTask(NamedPipeServerStream stream, TProxy proxy, CancellationToken token)
         {
             Task.Run(async () =>
             {
