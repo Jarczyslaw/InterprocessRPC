@@ -65,18 +65,19 @@ namespace InterprocessRPC
 
         private async Task StartListening(TProxy proxy, CancellationToken token)
         {
-            while (!token.IsCancellationRequested)
+            NamedPipeServerStream stream = null;
+            try
             {
-                var stream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
-                try
+                while (!token.IsCancellationRequested)
                 {
+                    stream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
                     await stream.WaitForConnectionAsync(token);
                     StartConnectionTask(stream, proxy, token);
                 }
-                catch (OperationCanceledException)
-                {
-                    stream.Dispose();
-                }
+            }
+            finally
+            {
+                stream?.Dispose();
             }
         }
 
