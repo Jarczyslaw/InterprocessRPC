@@ -18,7 +18,7 @@ namespace InterprocessRPC
         where TProxy : class
     {
         private CancellationTokenSource cancellationTokenSource;
-        private AutoResetEvent connectionTaskResetEvent = new AutoResetEvent(true);
+        private readonly AutoResetEvent connectionTaskResetEvent = new AutoResetEvent(true);
 
         public event OnListeningStart ListeningStart;
 
@@ -31,6 +31,20 @@ namespace InterprocessRPC
         public ConcurrentList<ServerConnection> Connections { get; } = new ConcurrentList<ServerConnection>();
         public string PipeName { get; private set; }
         public bool HasConnectedClients => Connections.Count != 0;
+
+        public bool Listening { get; private set; }
+
+        private void InvokeListeningStart()
+        {
+            Listening = true;
+            ListeningStart?.Invoke();
+        }
+
+        private void InvokeListeningStop()
+        {
+            Listening = false;
+            ListeningStop?.Invoke();
+        }
 
         public async Task Start(string pipeName, Func<TProxy> factoryFunc)
         {
@@ -52,12 +66,12 @@ namespace InterprocessRPC
                 connectionTaskResetEvent.WaitOne();
                 try
                 {
-                    ListeningStart?.Invoke();
+                    InvokeListeningStart();
                     await StartListening(proxy, token);
                 }
                 finally
                 {
-                    ListeningStop?.Invoke();
+                    InvokeListeningStop();
                     connectionTaskResetEvent.Set();
                 }
             }, token);
