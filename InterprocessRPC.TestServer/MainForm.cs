@@ -14,9 +14,23 @@ namespace InterprocessRPC.TestServer
             InitializeComponent();
 
             server.ListeningStart += () => AppendMessage("Server started");
-            server.ListeningStop += () => AppendMessage("Server stopped");
+            server.ListeningStop += i =>
+            {
+                AppendMessage("Server stopped");
+                if (i.Exception != null)
+                {
+                    MessageBox.Show(i.Exception.Message);
+                }
+            };
             server.ClientConnected += _ => AppendMessage($"Client connected. Clients count: {server.Connections.Count}");
-            server.ClientDisconnected += _ => AppendMessage($"Client disconnected. Clients count: {server.Connections.Count}");
+            server.ClientDisconnected += i =>
+            {
+                AppendMessage($"Client disconnected. Clients count: {server.Connections.Count}");
+                if (i.Exception != null)
+                {
+                    MessageBox.Show(i.Exception.Message);
+                }
+            };
         }
 
         private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)

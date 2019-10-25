@@ -8,11 +8,11 @@ namespace InterprocessRPC
 {
     public delegate void OnListeningStart();
 
-    public delegate void OnListeningStop();
+    public delegate void OnListeningStop(ListeningInfo listeningInfo);
 
     public delegate void OnClientConnected(ServerConnection serverConnection);
 
-    public delegate void OnClientDisconnected(ServerConnection serverConnection);
+    public delegate void OnClientDisconnected(ClientInfo clientInfo);
 
     public class Server<TProxy>
         where TProxy : class
@@ -40,10 +40,10 @@ namespace InterprocessRPC
             ListeningStart?.Invoke();
         }
 
-        private void InvokeListeningStop()
+        private void InvokeListeningStop(ListeningInfo listeningInfo)
         {
             Listening = false;
-            ListeningStop?.Invoke();
+            ListeningStop?.Invoke(listeningInfo);
         }
 
         public async Task Start(string pipeName, Func<TProxy> factoryFunc)
@@ -64,14 +64,24 @@ namespace InterprocessRPC
             Task.Run(async () =>
             {
                 connectionTaskResetEvent.WaitOne();
+                var info = new ListeningInfo
+                {
+                    StartTime = DateTime.Now
+                };
                 try
                 {
                     InvokeListeningStart();
                     await StartListening(proxy, token);
                 }
+                catch (OperationCanceledException) { }
+                catch (Exception exc)
+                {
+                    info.Exception = exc;
+                }
                 finally
                 {
-                    InvokeListeningStop();
+                    info.EndTime = DateTime.Now;
+                    InvokeListeningStop(info);
                     connectionTaskResetEvent.Set();
                 }
             }, token);
@@ -99,11 +109,17 @@ namespace InterprocessRPC
         {
             Task.Run(async () =>
             {
+                var id = Guid.NewGuid();
+                var info = new ClientInfo
+                {
+                    ConnectedTime = DateTime.Now,
+                    Guid = id,
+                };
                 var connection = new ServerConnection
                 {
                     Rpc = JsonRpc.Attach(stream, proxy),
                     Stream = stream,
-                    Guid = Guid.NewGuid()
+                    Guid = id
                 };
 
                 try
@@ -115,11 +131,17 @@ namespace InterprocessRPC
                         await Task.Delay(1, token);
                     }
                 }
+                catch (OperationCanceledException) { }
+                catch (Exception exc)
+                {
+                    info.Exception = exc;
+                }
                 finally
                 {
+                    info.DisconnectedTime = DateTime.Now;
                     Connections.Remove(connection);
-                    ClientDisconnected?.Invoke(connection);
                     connection.Dispose();
+                    ClientDisconnected?.Invoke(info);
                 }
             }, token);
         }
