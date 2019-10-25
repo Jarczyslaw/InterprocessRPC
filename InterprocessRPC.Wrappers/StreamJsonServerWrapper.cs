@@ -6,7 +6,7 @@ namespace InterprocessRPC.Wrappers
 {
     public class StreamJsonServerWrapper : IServerWrapper
     {
-        private Server<IProxy> server = new Server<IProxy>();
+        private readonly Server<IProxy> server = new Server<IProxy>();
 
         public Action ListeningStart { get; set; }
 
@@ -24,14 +24,14 @@ namespace InterprocessRPC.Wrappers
             server.ListeningStop += _ => ListeningStop?.Invoke();
         }
 
-        public async Task Start()
+        public Task Start()
         {
-            await server.Start(Proxy.ProxyPipeName, CreateProxy);
+            return server.Start(Proxy.ProxyPipeName, CreateProxy);
         }
 
-        public async Task Stop()
+        public Task Stop()
         {
-            await server.Stop();
+            return server.Stop();
         }
 
         private Proxy CreateProxy()

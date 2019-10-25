@@ -1,4 +1,5 @@
 ﻿using InterprocessRPC.Common;
+using InterprocessRPC.Wrappers;
 using System;
 using System.Windows.Forms;
 
@@ -6,10 +7,12 @@ namespace InterprocessRPC.TestClient
 {
     public partial class MainForm : Form
     {
-        private Client<IProxy> client;
+        private readonly IClientWrapper clientWrapper;
 
-        public MainForm()
+        public MainForm(IClientWrapper clientWrapper)
         {
+            this.clientWrapper = clientWrapper;
+
             InitializeComponent();
         }
 
@@ -19,9 +22,7 @@ namespace InterprocessRPC.TestClient
             {
                 using (var execTime = new ExecutionTime())
                 {
-                    client?.Dispose();
-                    client = new Client<IProxy>();
-                    await client.Start(Proxy.ProxyPipeName);
+                    await clientWrapper.Start();
                 }
             }
             catch (Exception exc)
@@ -42,7 +43,7 @@ namespace InterprocessRPC.TestClient
                 var result = false;
                 using (var execTime = new ExecutionTime())
                 {
-                    result = await client.Proxy.CheckConnection();
+                    result = await clientWrapper.CheckConnection();
                 }
                 MessageBox.Show("Connection state: " + (result ? "connected" : "disconnected"));
             }
@@ -65,7 +66,7 @@ namespace InterprocessRPC.TestClient
                 var message = string.Empty;
                 using (var execTime = new ExecutionTime())
                 {
-                    message = await client.Proxy.GetHelloMessage(tbName.Text);
+                    message = await clientWrapper.GetHelloMessage(tbName.Text);
                 }
                 MessageBox.Show(message);
             }
@@ -82,7 +83,7 @@ namespace InterprocessRPC.TestClient
                 ServerInfo serverInfo = null;
                 using (var execTime = new ExecutionTime())
                 {
-                    serverInfo = await client.Proxy.GetServerInfo();
+                    serverInfo = await clientWrapper.GetServerInfo();
                 }
                 MessageBox.Show(serverInfo.ToString());
             }
@@ -101,7 +102,7 @@ namespace InterprocessRPC.TestClient
         {
             try
             {
-                client?.Dispose();
+                clientWrapper.Stop();
             }
             catch (Exception exc)
             {

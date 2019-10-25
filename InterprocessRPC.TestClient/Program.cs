@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InterprocessRPC.Wrappers;
+using System;
 using System.Windows.Forms;
 
 namespace InterprocessRPC.TestClient
@@ -10,7 +11,7 @@ namespace InterprocessRPC.TestClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new MainForm(new StreamJsonClientWrapper()));
         }
     }
 }

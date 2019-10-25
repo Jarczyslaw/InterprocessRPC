@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace InterprocessRPC.Wrappers
@@ -14,6 +11,7 @@ namespace InterprocessRPC.Wrappers
         Action ClientDisconnected { get; set; }
 
         Task Start();
+
         Task Stop();
     }
 }

@@ -166,6 +166,10 @@
       <Project>{0cc52d05-7eb0-4f46-8323-56b1c09da3cc}</Project>
       <Name>InterprocessRPC.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InterprocessRPC.Wrappers\InterprocessRPC.Wrappers.csproj">
+      <Project>{223A0DF9-68A0-44F6-820E-AAD843E1C077}</Project>
+      <Name>InterprocessRPC.Wrappers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InterprocessRPC\InterprocessRPC.csproj">
       <Project>{b9096ad6-24ea-4a8d-a70e-ea237a479661}</Project>
       <Name>InterprocessRPC</Name>
