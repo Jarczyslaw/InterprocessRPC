@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29411.108
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterprocessRPC", "InterprocessRPC\InterprocessRPC.csproj", "{B9096AD6-24EA-4A8D-A70E-EA237A479661}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterprocessRPC", "InterprocessRPC\InterprocessRPC.csproj", "{B9096AD6-24EA-4A8D-A70E-EA237A479661}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterprocessRPC.TestServer", "InterprocessRPC.TestServer\InterprocessRPC.TestServer.csproj", "{21B02A8F-F4ED-42F4-BB8C-63EC3438067E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterprocessRPC.Common", "InterprocessRPC.Common\InterprocessRPC.Common.csproj", "{0CC52D05-7EB0-4F46-8323-56B1C09DA3CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterprocessRPC.TestClient", "InterprocessRPC.TestClient\InterprocessRPC.TestClient.csproj", "{A5F85148-2941-4ADD-8546-23254FE2912D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterprocessRPC.Wrappers", "InterprocessRPC.Wrappers\InterprocessRPC.Wrappers.csproj", "{223A0DF9-68A0-44F6-820E-AAD843E1C077}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A5F85148-2941-4ADD-8546-23254FE2912D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5F85148-2941-4ADD-8546-23254FE2912D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5F85148-2941-4ADD-8546-23254FE2912D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{223A0DF9-68A0-44F6-820E-AAD843E1C077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{223A0DF9-68A0-44F6-820E-AAD843E1C077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{223A0DF9-68A0-44F6-820E-AAD843E1C077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{223A0DF9-68A0-44F6-820E-AAD843E1C077}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

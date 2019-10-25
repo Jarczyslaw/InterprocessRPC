@@ -1,4 +1,4 @@
-﻿using InterprocessRPC.Common;
+﻿using InterprocessRPC.Wrappers;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -7,30 +7,17 @@ namespace InterprocessRPC.TestServer
 {
     public partial class MainForm : Form
     {
-        private Server<IProxy> server = new Server<IProxy>();
+        private readonly IServerWrapper serverWrapper;
 
-        public MainForm()
+        public MainForm(IServerWrapper serverWrapper)
         {
+            this.serverWrapper = serverWrapper;
             InitializeComponent();
 
-            server.ListeningStart += () => AppendMessage("Server started");
-            server.ListeningStop += i =>
-            {
-                AppendMessage("Server stopped");
-                if (i.Exception != null)
-                {
-                    MessageBox.Show(i.Exception.Message);
-                }
-            };
-            server.ClientConnected += _ => AppendMessage($"Client connected. Clients count: {server.Connections.Count}");
-            server.ClientDisconnected += i =>
-            {
-                AppendMessage($"Client disconnected. Clients count: {server.Connections.Count}");
-                if (i.Exception != null)
-                {
-                    MessageBox.Show(i.Exception.Message);
-                }
-            };
+            serverWrapper.ListeningStart += () => AppendMessage("Server started");
+            serverWrapper.ListeningStop += () => AppendMessage("Server stopped");
+            serverWrapper.ClientConnected += () => AppendMessage("Client connected");
+            serverWrapper.ClientDisconnected += () => AppendMessage("Client disconnected");
         }
 
         private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -38,28 +25,11 @@ namespace InterprocessRPC.TestServer
             await Stop();
         }
 
-        private Proxy CreateProxy()
-        {
-            var proxy = new Proxy();
-            proxy.GetServerInfoFunc += () => new ServerInfo
-            {
-                ConnectionsCount = server.Connections.Count,
-                ServerTime = DateTime.Now
-            };
-            return proxy;
-        }
-
         private async void btnStart_Click(object sender, EventArgs e)
         {
             try
             {
-                var proxy = new Proxy();
-                proxy.GetServerInfoFunc += () => new ServerInfo
-                {
-                    ConnectionsCount = server.Connections.Count,
-                    ServerTime = DateTime.Now
-                };
-                await server.Start(Proxy.ProxyPipeName, CreateProxy);
+                await serverWrapper.Start();
             }
             catch (Exception exc)
             {
@@ -76,10 +46,7 @@ namespace InterprocessRPC.TestServer
         {
             try
             {
-                if (server != null)
-                {
-                    await server.Stop();
-                }
+                await serverWrapper.Stop();
             }
             catch (Exception exc)
             {
