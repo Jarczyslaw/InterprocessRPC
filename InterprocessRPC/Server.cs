@@ -18,7 +18,7 @@ namespace InterprocessRPC
         where TProxy : class
     {
         private CancellationTokenSource cancellationTokenSource;
-        private readonly AutoResetEvent connectionTaskResetEvent = new AutoResetEvent(true);
+        private readonly AutoResetEvent listeningTaskResetEvent = new AutoResetEvent(true);
 
         public event OnListeningStart ListeningStart;
 
@@ -63,7 +63,7 @@ namespace InterprocessRPC
         {
             Task.Run(async () =>
             {
-                connectionTaskResetEvent.WaitOne();
+                listeningTaskResetEvent.WaitOne();
                 var info = new ListeningInfo
                 {
                     StartTime = DateTime.Now
@@ -82,7 +82,7 @@ namespace InterprocessRPC
                 {
                     info.EndTime = DateTime.Now;
                     InvokeListeningStop(info);
-                    connectionTaskResetEvent.Set();
+                    listeningTaskResetEvent.Set();
                 }
             }, token);
         }
