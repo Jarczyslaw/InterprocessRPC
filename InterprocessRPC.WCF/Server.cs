@@ -35,7 +35,17 @@ namespace InterprocessRPC.WCF
 
         public void Stop()
         {
-            Host?.Close();
+            if (Host != null)
+            {
+                try
+                {
+                    Host.Close();
+                }
+                catch
+                {
+                    Host.Abort();
+                }
+            }
         }
 
         public void Dispose()
