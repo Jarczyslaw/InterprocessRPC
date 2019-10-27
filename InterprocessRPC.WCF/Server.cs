@@ -17,6 +17,7 @@ namespace InterprocessRPC.WCF
         }
 
         public ServiceHost Host { get; private set; }
+        public bool IsListening => Host?.State == CommunicationState.Opened;
 
         public void Start(IAddressProvider addressProvider, Type serviceType)
         {

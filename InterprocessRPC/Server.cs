@@ -32,11 +32,11 @@ namespace InterprocessRPC
         public string PipeName { get; private set; }
         public bool HasConnectedClients => Connections.Count != 0;
 
-        public bool Listening { get; private set; }
+        public bool IsListening { get; private set; }
 
         private void InvokeListeningStart()
         {
-            Listening = true;
+            IsListening = true;
             ListeningStart?.Invoke();
         }
 
@@ -50,7 +50,7 @@ namespace InterprocessRPC
 
         private void InvokeListeningStop(ListeningInfo listeningInfo)
         {
-            Listening = false;
+            IsListening = false;
             ListeningStop?.Invoke(listeningInfo);
         }
 
