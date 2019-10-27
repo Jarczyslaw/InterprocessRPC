@@ -80,12 +80,12 @@ namespace InterprocessRPC.TestClient
         {
             try
             {
-                ServerInfo serverInfo = null;
+                DateTime dateTime;
                 using (var execTime = new ExecutionTime())
                 {
-                    serverInfo = await clientWrapper.GetServerInfo();
+                    dateTime = await clientWrapper.GetServerTime();
                 }
-                MessageBox.Show(serverInfo.ToString());
+                MessageBox.Show(dateTime.ToString());
             }
             catch (Exception exc)
             {

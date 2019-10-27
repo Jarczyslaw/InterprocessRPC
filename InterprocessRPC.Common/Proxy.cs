@@ -1,13 +1,13 @@
 ﻿using System;
+using System.ServiceModel;
 using System.Threading.Tasks;
 
 namespace InterprocessRPC.Common
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class Proxy : IProxy
     {
         public static string ProxyPipeName => nameof(ProxyPipeName);
-
-        public Func<ServerInfo> GetServerInfoFunc { get; set; }
 
         public Task<bool> CheckConnection()
         {
@@ -19,9 +19,9 @@ namespace InterprocessRPC.Common
             return Task.FromResult($"Hello {name}!");
         }
 
-        public Task<ServerInfo> GetServerInfo()
+        public Task<DateTime> GetServerTime()
         {
-            return Task.FromResult(GetServerInfoFunc());
+            return Task.FromResult(DateTime.Now);
         }
     }
 }

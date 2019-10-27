@@ -26,23 +26,12 @@ namespace InterprocessRPC.Wrappers
 
         public Task Start()
         {
-            return server.Start(Proxy.ProxyPipeName, CreateProxy);
+            return server.Start(Proxy.ProxyPipeName, () => new Proxy());
         }
 
         public Task Stop()
         {
             return server.Stop();
-        }
-
-        private Proxy CreateProxy()
-        {
-            var proxy = new Proxy();
-            proxy.GetServerInfoFunc += () => new ServerInfo
-            {
-                ConnectionsCount = server.Connections.Count,
-                ServerTime = DateTime.Now
-            };
-            return proxy;
         }
     }
 }

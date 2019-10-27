@@ -11,7 +11,7 @@ namespace InterprocessRPC.TestServer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(new StreamJsonServerWrapper()));
+            Application.Run(new MainForm(new WCFServerWrapper()));
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace InterprocessRPC.Wrappers
 {
-    public class StreamJsonClientWrapper : IClientWrapper
+    public class WCFClientWrapper : IClientWrapper
     {
-        private readonly Client<IProxy> client = new Client<IProxy>();
+        private readonly WCF.Client<IProxy> client = new WCF.Client<IProxy>();
 
         public Task<bool> CheckConnection()
         {
@@ -25,7 +25,8 @@ namespace InterprocessRPC.Wrappers
 
         public Task Start()
         {
-            return client.Start(Proxy.ProxyPipeName);
+            client.Start(new WCFAddressProvider());
+            return Task.CompletedTask;
         }
 
         public Task Stop()

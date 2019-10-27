@@ -30,6 +30,14 @@ namespace InterprocessRPC
             await StartNew(pipeName);
         }
 
+        public static async Task<Client<T>> StartNew<T>(string pipeName)
+            where T : class
+        {
+            var client = new Client<T>();
+            await client.Start(pipeName);
+            return client;
+        }
+
         private async Task StartNew(string pipeName)
         {
             PipeName = pipeName;

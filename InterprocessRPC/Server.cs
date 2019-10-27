@@ -40,6 +40,14 @@ namespace InterprocessRPC
             ListeningStart?.Invoke();
         }
 
+        public static async Task<Server<T>> StartNew<T>(string pipeName, Func<T> factoryFunc)
+            where T : class
+        {
+            var server = new Server<T>();
+            await server.Start(pipeName, factoryFunc);
+            return server;
+        }
+
         private void InvokeListeningStop(ListeningInfo listeningInfo)
         {
             Listening = false;
@@ -66,7 +74,8 @@ namespace InterprocessRPC
                 listeningTaskResetEvent.WaitOne();
                 var info = new ListeningInfo
                 {
-                    StartTime = DateTime.Now
+                    StartTime = DateTime.Now,
+                    PipeName = PipeName
                 };
                 try
                 {

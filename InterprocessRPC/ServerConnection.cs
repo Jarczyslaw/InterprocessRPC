@@ -6,9 +6,9 @@ namespace InterprocessRPC
 {
     public class ServerConnection : IDisposable
     {
-        public Guid Guid { get; set; }
-        public NamedPipeServerStream Stream { get; set; }
-        public JsonRpc Rpc { get; set; }
+        public Guid Guid { get; internal set; }
+        public NamedPipeServerStream Stream { get; internal set; }
+        public JsonRpc Rpc { get; internal set; }
 
         public bool IsAlive => Stream.IsConnected;
 

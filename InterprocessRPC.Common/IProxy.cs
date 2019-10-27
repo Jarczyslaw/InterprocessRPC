@@ -1,13 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace InterprocessRPC.Common
 {
+    [ServiceContract]
     public interface IProxy
     {
+        [OperationContract]
         Task<bool> CheckConnection();
 
+        [OperationContract]
         Task<string> GetHelloMessage(string name);
 
-        Task<ServerInfo> GetServerInfo();
+        [OperationContract]
+        Task<DateTime> GetServerTime();
     }
 }

@@ -4,10 +4,10 @@ namespace InterprocessRPC
 {
     public class ClientInfo
     {
-        public DateTime ConnectedTime { get; set; }
-        public DateTime DisconnectedTime { get; set; }
-        public TimeSpan Duration { get; set; }
-        public Guid Guid { get; set; }
-        public Exception Exception { get; set; }
+        public DateTime ConnectedTime { get; internal set; }
+        public DateTime DisconnectedTime { get; internal set; }
+        public TimeSpan Duration { get; internal set; }
+        public Guid Guid { get; internal set; }
+        public Exception Exception { get; internal set; }
     }
 }

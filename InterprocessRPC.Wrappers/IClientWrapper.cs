@@ -1,4 +1,4 @@
-﻿using InterprocessRPC.Common;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace InterprocessRPC.Wrappers
@@ -13,6 +13,6 @@ namespace InterprocessRPC.Wrappers
 
         Task<string> GetHelloMessage(string name);
 
-        Task<ServerInfo> GetServerInfo();
+        Task<DateTime> GetServerTime();
     }
 }
