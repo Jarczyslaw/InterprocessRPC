@@ -11,7 +11,7 @@ namespace InterprocessRPC.TestClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(new IpcFrameworkClientWrapper()));
+            Application.Run(new MainForm(ClientFactory.GetClientWrapper()));
         }
     }
 }
