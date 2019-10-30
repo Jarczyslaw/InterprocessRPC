@@ -65,6 +65,9 @@
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Eneter.Messaging.Framework, Version=8.0.4.0, Culture=neutral, PublicKeyToken=b85852a6d7b5cd07, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eneter.Messaging.Framework.8.0.4\lib\net45\Eneter.Messaging.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="JKang.IpcServiceFramework.Client, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\JKang.IpcServiceFramework.Client.2.2.2\lib\netstandard2.0\JKang.IpcServiceFramework.Client.dll</HintPath>
     </Reference>
@@ -207,6 +210,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EneterClientWrapper.cs" />
     <Compile Include="ServerFactory.cs" />
     <Compile Include="ClientFactory.cs" />
     <Compile Include="IClientWrapper.cs" />
@@ -224,6 +228,10 @@
     <ProjectReference Include="..\InterprocessRPC.Common\InterprocessRPC.Common.csproj">
       <Project>{0cc52d05-7eb0-4f46-8323-56b1c09da3cc}</Project>
       <Name>InterprocessRPC.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InterprocessRPC.Eneter\InterprocessRPC.Eneter.csproj">
+      <Project>{dd472e39-21b3-46ac-9f10-6f723402b4ce}</Project>
+      <Name>InterprocessRPC.Eneter</Name>
     </ProjectReference>
     <ProjectReference Include="..\InterprocessRPC.WCF\InterprocessRPC.WCF.csproj">
       <Project>{4bb7f588-df3e-4e59-a559-c4989d7dbc1a}</Project>
