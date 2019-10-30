@@ -14,6 +14,11 @@ namespace InterprocessRPC.Eneter
             RpcService = rcpFactory.CreatePerClientInstanceService(proxyFactoryFunc);
         }
 
+        public Server(TProxy proxy)
+        {
+            RpcService = rcpFactory.CreateSingleInstanceService(proxy);
+        }
+
         public IRpcService<TProxy> RpcService { get; }
 
         public void Start(string serviceName)
