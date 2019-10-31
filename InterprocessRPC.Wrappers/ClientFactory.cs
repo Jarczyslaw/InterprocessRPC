@@ -1,4 +1,6 @@
-﻿namespace InterprocessRPC.Wrappers
+﻿using InterprocessRPC.Wrappers.ClientWrappers;
+
+namespace InterprocessRPC.Wrappers
 {
     public static class ClientFactory
     {
@@ -10,6 +12,8 @@
             return new WCFClientWrapper();
 #elif IPCFRAMEWORK
             return new IpcFrameworkClientWrapper();
+#elif ENETER
+            return new EneterClientWrapper();
 #else
             return null;
 #endif

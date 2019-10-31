@@ -1,5 +1,5 @@
 ﻿using InterprocessRPC.Common;
-using InterprocessRPC.Wrappers;
+using InterprocessRPC.Wrappers.ClientWrappers;
 using System;
 using System.Windows.Forms;
 

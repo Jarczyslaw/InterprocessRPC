@@ -3,7 +3,7 @@ using JKang.IpcServiceFramework;
 using System;
 using System.Threading.Tasks;
 
-namespace InterprocessRPC.Wrappers
+namespace InterprocessRPC.Wrappers.ClientWrappers
 {
     public class IpcFrameworkClientWrapper : IClientWrapper
     {

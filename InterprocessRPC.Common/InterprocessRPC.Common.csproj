@@ -133,8 +133,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExecutionTime.cs" />
+    <Compile Include="IEneterProxy.cs" />
     <Compile Include="IProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EneterProxy .cs" />
     <Compile Include="Proxy.cs" />
   </ItemGroup>
   <ItemGroup>

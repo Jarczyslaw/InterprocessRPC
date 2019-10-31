@@ -2,26 +2,26 @@
 using System;
 using System.Threading.Tasks;
 
-namespace InterprocessRPC.Wrappers
+namespace InterprocessRPC.Wrappers.ClientWrappers
 {
     public class EneterClientWrapper : IClientWrapper
     {
-        private readonly Eneter.Client<IProxy> client = new Eneter.Client<IProxy>();
-        private IProxy Proxy => client.RpcClient.Proxy;
+        private readonly Eneter.Client<IEneterProxy> client = new Eneter.Client<IEneterProxy>();
+        private IEneterProxy Proxy => client.RpcClient.Proxy;
 
         public Task<bool> CheckConnection()
         {
-            return Proxy.CheckConnection();
+            return Task.FromResult(Proxy.CheckConnection());
         }
 
         public Task<string> GetHelloMessage(string name)
         {
-            return Proxy.GetHelloMessage(name);
+            return Task.FromResult(Proxy.GetHelloMessage(name));
         }
 
         public Task<DateTime> GetServerTime()
         {
-            return Proxy.GetServerTime();
+            return Task.FromResult(Proxy.GetServerTime());
         }
 
         public Task Start()

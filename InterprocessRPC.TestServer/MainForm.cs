@@ -1,4 +1,4 @@
-﻿using InterprocessRPC.Wrappers;
+﻿using InterprocessRPC.Wrappers.ServerWrappers;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace InterprocessRPC.Wrappers
+namespace InterprocessRPC.Wrappers.ServerWrappers
 {
     public interface IServerWrapper
     {
