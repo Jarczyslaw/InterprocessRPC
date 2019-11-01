@@ -1,0 +1,30 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "InterprocessRPC.gRPC";
+
+package Proxy;
+
+service ProxyService {
+  rpc CheckConnection (google.protobuf.Empty) returns (CheckConnectionReply);
+  rpc GetHelloMessage (GetHelloMessageRequest) returns (GetHelloMessageReply);
+  rpc GetServerTime (google.protobuf.Empty) returns (GetServerTimeReply);
+}
+
+message CheckConnectionReply {
+	bool result = 1;
+}
+
+message GetHelloMessageRequest {
+	string name = 1;
+}
+
+message GetHelloMessageReply {
+	string message = 1;
+}
+
+message GetServerTimeReply {
+	google.protobuf.Timestamp time = 1;
+}
