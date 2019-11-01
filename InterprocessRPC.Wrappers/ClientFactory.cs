@@ -14,6 +14,8 @@ namespace InterprocessRPC.Wrappers
             return new IpcFrameworkClientWrapper();
 #elif ENETER
             return new EneterClientWrapper();
+#elif GRPC
+            return new gRPCClientWrapper();
 #else
             return null;
 #endif
